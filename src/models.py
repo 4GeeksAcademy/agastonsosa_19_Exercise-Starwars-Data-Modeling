@@ -7,13 +7,28 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Customer(Base):
-    __tablename__ = 'customer'
-    customerID = Column(Integer, primary_key=True)
-    name = Column(String, index=True)
-    address1 = Column(String)
-    address2 = Column(String, nullable=True)
-    address3 = Column(String, nullable=True)
+class Usuario(Base):
+    __tablename__ = 'usuarios'
+    id = Column(Integer, primary_key=True)
+    username = Column(String, unique=True, nullable=False)
+    password = Column(String, nullable=False)
+    likes = relationship('Likes', back_populates='user')
+
+class Likes(Base):
+    __tablename__ = 'favoritos'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    planet_id = Column(Integer, ForeignKey('planets.uid'))
+    character_id = Column(Integer, ForeignKey('people.uid'))
+    starship_id = Column(Integer, ForeignKey('starships.uid'))
+    vehicle_id = Column(Integer, ForeignKey('vehicles.uid'))
+    film_id = Column(Integer, ForeignKey('films.uid'))
+    user = relationship('Usuario', back_populates='likes')
+    planet = relationship('Planet')
+    character = relationship('Person')
+    vehicle = relationship('Vehicle')
+    starship = relationship('Starship')
+    film = relationship('Film')
 
 class Vehicle(Base):
     __tablename__ = 'vehicles'
